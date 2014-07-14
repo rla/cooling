@@ -1,22 +1,13 @@
-#define F_CPU 16000000UL
+#define F_CPU 12000000UL
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <util/atomic.h>
 
-// Set 0 to disable USART.
-
-#define ENABLE_USART 1
-
-// Set 0 to disable ADC channel(s).
-
-#define ENABLE_ADC_1 1
-#define ENABLE_ADC_2 1
-
 #define USART_BAUDRATE 9600
 #define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1)
-
+/*
 // See p. 181
 
 void init_usart() {
@@ -283,9 +274,31 @@ void maintain_rpm() {
 
     OCR0A = pwm;
 }
+*/
+
+#include "init.c"
+#include "fans.c"
+#include "measure.c"
 
 int main() {
 
+    init();
+    init_fans_data();
+
+    fan_enable(0);
+
+    fan_set_pwm(0, 120);
+
+    uint8_t pwm = 100;
+
+    while (1) {
+
+        _delay_ms(2000);
+
+        fan_set_pwm(0, pwm += 40);
+    };
+
+    /*
     DDRD |= (1 << DD7);
 
         PORTD |= (1 << PD7);
@@ -319,5 +332,5 @@ int main() {
         }
     }
 
-    return 1;
+    return 1;*/
 }

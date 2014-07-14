@@ -15,4 +15,7 @@ burn-usart: usart_echo.hex
 burn-fuse:
 	avrdude -c avrispmkii -p m88p -U lfuse:w:0xf7:m
 
-.PHONY: burn burn-usart burn-fuse
+clean:
+	rm -r controller.hex
+
+.PHONY: burn burn-usart burn-fuse clean
