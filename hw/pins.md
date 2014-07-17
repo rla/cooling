@@ -108,7 +108,6 @@ Clock selection: full swing crystal
  * SPCR – SPI control register - NO CHANGE
  * SPSR – SPI status register - NOT USED
  * SPDR – SPI data register - NOT USED
- *
 
 ### Port B
 
@@ -175,7 +174,19 @@ Timer 2 needs to be configured in phase-correct PWM mode.
 
 TODO
 
+### ADC
 
+ADC reference is set to AVcc.
+
+ * ADCSRB – ADC Control and Status Register B - NO CHANGE
+ * ACSR – Analog Comparator Control and Status Register - NO CHANGE
+ * DIDR1 – Digital Input Disable Register 1 - NO CHANGE
+ * ADMUX – ADC Multiplexer Selection Register
+ * ADCSRA – ADC Control and Status Register A
+ * ADCL and ADCH – The ADC Data Register
+ * ADCSRB – ADC Control and Status Register B
+ * DIDR0 – Digital Input Disable Register 0
+ 
 
 FIXME - use watchdog?
 http://www.embedds.com/using-watchdog-timer-in-your-projects/

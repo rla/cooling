@@ -1,51 +1,33 @@
-typedef struct {
-    volatile uint8_t pin_rpm;
-    volatile uint8_t pin_enable;
-    volatile uint8_t *port_pwm;
-    volatile uint16_t rpm;
-} fan_t;
-
-volatile fan_t fans[4];
-
-// Initializes fans data.
-
-void init_fans_data() {
-
-    fans[0].pin_rpm = PC2;
-    fans[0].pin_enable = PB0;
-    fans[0].port_pwm = &OCR0A;
-    fans[0].rpm = 0;
-
-    fans[1].pin_rpm = PC3;
-    fans[1].pin_enable = PB1;
-    fans[1].port_pwm = &OCR0B;
-    fans[1].rpm = 0;
-
-    fans[2].pin_rpm = PC4;
-    fans[2].pin_enable = PB2;
-    fans[2].port_pwm = &OCR2A;
-    fans[2].rpm = 0;
-
-    fans[3].pin_rpm = PC5;
-    fans[3].pin_enable = PB4;
-    fans[3].port_pwm = &OCR2B;
-    fans[3].rpm = 0;
-}
-
-// Sets given fan PWM.
+// Sets the given fan PWM.
 
 void fan_set_pwm(uint8_t fan, uint8_t pwm) {
 
-    (*fans[fan].port_pwm) = pwm;
+    switch (fan) {
+
+        case 0: OCR0A = pwm; break;
+
+        case 1: OCR0B = pwm; break;
+
+        case 2: OCR2A = pwm; break;
+
+        case 3: OCR2B = pwm; break;
+    }
 }
 
 // Enables the given fan.
 
 void fan_enable(uint8_t fan) {
 
-    uint8_t pin = fans[fan].pin_enable;
+    switch (fan) {
 
-    PORTB |= (1 << pin);
+        case 0: PORTB |= (1 << PB0); break;
+
+        case 1: PORTB |= (1 << PB1); break;
+
+        case 2: PORTB |= (1 << PB2); break;
+
+        case 3: PORTB |= (1 << PB4); break;
+    }
 }
 
 // Disables the given fan.
@@ -54,7 +36,32 @@ void fan_disable(uint8_t fan) {
 
     fan_set_pwm(fan, 0);
 
-    uint8_t pin = fans[fan].pin_enable;
+    switch (fan) {
 
-    PORTB &= ~(1 << pin);
+        case 0: PORTB &= ~(1 << PB0); break;
+
+        case 1: PORTB &= ~(1 << PB1); break;
+
+        case 2: PORTB &= ~(1 << PB2); break;
+
+        case 3: PORTB &= ~(1 << PB4); break;
+    }
+}
+
+// Checks whether the given fan is enabled.
+
+uint8_t fan_enabled(uint8_t fan) {
+
+    switch (fan) {
+
+        case 0: return PORTB & (1 << PB0);
+
+        case 1: return PORTB & (1 << PB1);
+
+        case 2: return PORTB & (1 << PB2);
+
+        case 3: return PORTB & (1 << PB4);
+    }
+
+    return 0;
 }
