@@ -4,6 +4,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <util/atomic.h>
+#include <util/crc16.h>
 
 /*
 volatile uint16_t rpm = 0;
@@ -78,7 +79,11 @@ void measure() {
 #include "adc.c"
 #include "measure.c"
 #include "rpm.c"
-#include "usart.c"
+#include "hex.c"
+#include "usart_buffer.c"
+#include "pearson.c"
+#include "protocol.c"
+#include "usart_run.c"
 
 int main() {
 

@@ -130,6 +130,8 @@ suitable for tone-transfer can be found in the PDF file `hw/board.pdf`.
 
 ### Building binary
 
+TODO: build dependencies.
+
 To build the HEX binary for the controller:
 
     cd avr
@@ -141,6 +143,90 @@ To build the HEX binary for the controller:
  * Slow raising power: SUT 11.
  * No clock division by 8.
  * Low fuse result: 0xf7.
+
+## Protocol
+
+The communication protocol uses line-based transport format.
+Data on individual lines is encoded in hex encoding.
+
+Decoded commands have the following format:
+
+    [command_byte, arguments..., checksum_byte]
+
+Responses have the following format:
+
+    [response_ok, response arguments..., checksum_byte]
+
+or
+    [response_fail, checksum_byte]
+
+or
+    [response_checksum_fail, checksum_byte]
+
+Multibyte integers are sent in big-endian format.
+
+Maximum decoded message length is 10 bytes.
+
+### Checksum
+
+Checksum computation uses the Pearson hash algorithm:
+http://en.wikipedia.org/wiki/Pearson_hashing
+
+### Commands
+
+The following lists valid commands.
+
+#### Query ADC
+
+Commands return unsigned byte value of
+current temperature in Celsius.
+
+ * COMMAND_ADC_0 1
+ * COMMAND_ADC_1 2
+
+#### Query RPM
+
+Commands return unsigned 2-byte value
+of the last RPM measurement result.
+
+ * COMMAND_GET_RPM_0 3
+ * COMMAND_GET_RPM_1 4
+ * COMMAND_GET_RPM_2 5
+ * COMMAND_GET_RPM_3 6
+
+#### Set and query PWM
+
+Commands set and query PWM value
+as single unsigned byte value. 0 - min, 255 - max.
+
+ * COMMAND_SET_PWM_0 7
+ * COMMAND_SET_PWM_1 8
+ * COMMAND_SET_PWM_2 9
+ * COMMAND_SET_PWM_3 10
+ * COMMAND_GET_PWM_0 11
+ * COMMAND_GET_PWM_1 12
+ * COMMAND_GET_PWM_2 13
+ * COMMAND_GET_PWM_3 14
+
+#### Enable and disable devices
+
+These commands and responses have no arguments.
+
+ * COMMAND_ENABLE_0 15
+ * COMMAND_ENABLE_1 16
+ * COMMAND_ENABLE_2 17
+ * COMMAND_ENABLE_3 18
+
+ * COMMAND_DISABLE_0 19
+ * COMMAND_DISABLE_1 20
+ * COMMAND_DISABLE_2 21
+ * COMMAND_DISABLE_3 22
+
+### Invalid commands
+
+Invalid commands are ignored. Input buffer overflow
+on MCU is guarded against by ignoring all non-line-end input
+when the buffer is full.
 
 ## Changelog
 
