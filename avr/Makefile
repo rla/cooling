@@ -1,21 +1,18 @@
-all: controller.hex
+all: main.hex
 
-%.elf: %.c
+main.elf: src/main.c src/*.c
 	avr-gcc -std=c99 -mmcu=atmega88pa -Wall -Os -o $@ $<
 
-%.hex: %.elf
+main.hex: main.elf
 	avr-objcopy -j .text -j .data -O ihex $< $@
 
-burn: controller.hex
-	avrdude -c avrispmkii -p m88p -U flash:w:$<
-
-burn-usart: usart_echo.hex
+burn: main.hex
 	avrdude -c avrispmkii -p m88p -U flash:w:$<
 
 burn-fuse:
 	avrdude -c avrispmkii -p m88p -U lfuse:w:0xf7:m
 
 clean:
-	rm -r controller.hex
+	rm -r main.hex
 
-.PHONY: burn burn-usart burn-fuse clean
+.PHONY: burn burn-fuse clean

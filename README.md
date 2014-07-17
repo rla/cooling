@@ -15,9 +15,18 @@ the following features:
 
 The project is still work-in-progress.
 
+## Hardware
+
+### Building
+
+To build the HEX binary for the controller:
+
+    cd avr
+    make
+
 ## Changelog
 
- * 2014-02 Physical hardware design is ready.
+ * 2014-02-01 Physical hardware design is ready.
 
 ## License
 

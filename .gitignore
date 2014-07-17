@@ -1,2 +1,4 @@
 hw/*.s#*
 pc/node_modules
+avr/*.elf
+avr/*.hex
