@@ -158,9 +158,11 @@ Responses have the following format:
     [response_ok, response arguments..., checksum_byte]
 
 or
+
     [response_fail, checksum_byte]
 
 or
+
     [response_checksum_fail, checksum_byte]
 
 Multibyte integers are sent in big-endian format.
@@ -216,7 +218,6 @@ These commands and responses have no arguments.
  * COMMAND_ENABLE_1 16
  * COMMAND_ENABLE_2 17
  * COMMAND_ENABLE_3 18
-
  * COMMAND_DISABLE_0 19
  * COMMAND_DISABLE_1 20
  * COMMAND_DISABLE_2 21
@@ -228,8 +229,52 @@ Invalid commands are ignored. Input buffer overflow
 on MCU is guarded against by ignoring all non-line-end input
 when the buffer is full.
 
+## NodeJS library
+
+The project contains NodeJS library for connecting to the device through
+RS-232. The library is used to implement the command line client below.
+
+### Example usage
+
+TODO currently incomplete.
+
+    var d = device.open('/dev/ttyS1');
+
+    setInterval(function() {
+
+        d.temp0(function(err, data) {
+
+            if (err) throw err;
+
+            console.log(data);
+        });
+
+    }, 2000);
+
+## Command line client
+
+The command line client can be used for debugging and quering/adjusting
+parameters. Below is the supported usage.
+
+    Usage: cooling-query [options]
+
+    Options:
+
+        -h, --help               output usage information
+        -V, --version            output the version number
+        -p, --port [port]        Serial port to use.
+        -q, --query [query]      Queries current temperature/rpm/pwm.
+        -c, --command [command]  Enables/disables fans, sets parameters.
+        -a, --arg [value]        Argument value for the command.
+
+### Installation
+
+TODO
+
 ## Changelog
 
+ * 2014-07-27 Client code is mostly working.
+ * 2014-07-17 AVR code is mostly working.
  * 2014-02-01 Physical hardware design is ready.
 
 ## Known issues
@@ -237,6 +282,10 @@ when the buffer is full.
  * Max ADC input voltage is 1.1V when the internal reference is selected (by default).
  * Temperature sensor MCP9700 needs 100nF decoupling cap at the sensor to ensure
    stable operation.
+ * NodeJS API/command-line client has some issues with
+   [serialport](https://github.com/voodootikigod/node-serialport) package:
+     - https://github.com/voodootikigod/node-serialport/issues/241
+     - https://github.com/voodootikigod/node-serialport/issues/126
 
 ## License
 
