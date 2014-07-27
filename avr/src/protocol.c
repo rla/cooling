@@ -28,9 +28,9 @@
 
 #define COMMAND_ECHO 254
 
-#define COMMAND_OK 255
-
-#define RESPONSE_CHECKSUM_FAIL 254
+#define RESPONSE_OK 255
+#define RESPONSE_FAIL 254
+#define RESPONSE_CHECKSUM_FAIL 253
 
 // Must be <= USART_BUFFER_SIZE
 
@@ -61,6 +61,7 @@ void protocol_send_buffer_put(uint8_t byte) {
 }
 
 // Adds Pearson hash value into sending buffer.
+// FIXME rename
 
 void protocol_send_buffer_put_crc() {
 
@@ -91,18 +92,21 @@ void protocol_command_run() {
 
         case COMMAND_ADC_0:
 
+            protocol_send_buffer_put(RESPONSE_OK);
             protocol_send_buffer_put(temperature_0);
 
         break;
 
         case COMMAND_ADC_1:
 
+            protocol_send_buffer_put(RESPONSE_OK);
             protocol_send_buffer_put(temperature_1);
 
         break;
 
         case COMMAND_GET_RPM_0:
 
+            protocol_send_buffer_put(RESPONSE_OK);
             protocol_send_buffer_put((uint8_t) (rpm_0 >> 8));
             protocol_send_buffer_put((uint8_t) rpm_0);
 
@@ -110,6 +114,7 @@ void protocol_command_run() {
 
         case COMMAND_GET_RPM_1:
 
+            protocol_send_buffer_put(RESPONSE_OK);
             protocol_send_buffer_put((uint8_t) (rpm_1 >> 8));
             protocol_send_buffer_put((uint8_t) rpm_1);
 
@@ -117,6 +122,7 @@ void protocol_command_run() {
 
         case COMMAND_GET_RPM_2:
 
+            protocol_send_buffer_put(RESPONSE_OK);
             protocol_send_buffer_put((uint8_t) (rpm_2 >> 8));
             protocol_send_buffer_put((uint8_t) rpm_2);
 
@@ -124,6 +130,7 @@ void protocol_command_run() {
 
         case COMMAND_GET_RPM_3:
 
+            protocol_send_buffer_put(RESPONSE_OK);
             protocol_send_buffer_put((uint8_t) (rpm_3 >> 8));
             protocol_send_buffer_put((uint8_t) rpm_3);
 
@@ -132,84 +139,84 @@ void protocol_command_run() {
         case COMMAND_SET_PWM_0:
 
             fan_set_pwm(0, protocol_recv_buffer[1]);
-            protocol_send_buffer_put(COMMAND_OK);
+            protocol_send_buffer_put(RESPONSE_OK);
 
         break;
 
         case COMMAND_SET_PWM_1:
 
             fan_set_pwm(1, protocol_recv_buffer[1]);
-            protocol_send_buffer_put(COMMAND_OK);
+            protocol_send_buffer_put(RESPONSE_OK);
 
         break;
 
         case COMMAND_SET_PWM_2:
 
             fan_set_pwm(2, protocol_recv_buffer[1]);
-            protocol_send_buffer_put(COMMAND_OK);
+            protocol_send_buffer_put(RESPONSE_OK);
 
         break;
 
         case COMMAND_SET_PWM_3:
 
             fan_set_pwm(3, protocol_recv_buffer[1]);
-            protocol_send_buffer_put(COMMAND_OK);
+            protocol_send_buffer_put(RESPONSE_OK);
 
         break;
 
         case COMMAND_ENABLE_0:
 
             fan_enable(0);
-            protocol_send_buffer_put(COMMAND_OK);
+            protocol_send_buffer_put(RESPONSE_OK);
 
         break;
 
         case COMMAND_ENABLE_1:
 
             fan_enable(1);
-            protocol_send_buffer_put(COMMAND_OK);
+            protocol_send_buffer_put(RESPONSE_OK);
 
         break;
 
         case COMMAND_ENABLE_2:
 
             fan_enable(2);
-            protocol_send_buffer_put(COMMAND_OK);
+            protocol_send_buffer_put(RESPONSE_OK);
 
         break;
 
         case COMMAND_ENABLE_3:
 
             fan_enable(3);
-            protocol_send_buffer_put(COMMAND_OK);
+            protocol_send_buffer_put(RESPONSE_OK);
 
         break;
 
         case COMMAND_DISABLE_0:
 
             fan_disable(0);
-            protocol_send_buffer_put(COMMAND_OK);
+            protocol_send_buffer_put(RESPONSE_OK);
 
         break;
 
         case COMMAND_DISABLE_1:
 
             fan_disable(1);
-            protocol_send_buffer_put(COMMAND_OK);
+            protocol_send_buffer_put(RESPONSE_OK);
 
         break;
 
         case COMMAND_DISABLE_2:
 
             fan_disable(2);
-            protocol_send_buffer_put(COMMAND_OK);
+            protocol_send_buffer_put(RESPONSE_OK);
 
         break;
 
         case COMMAND_DISABLE_3:
 
             fan_disable(3);
-            protocol_send_buffer_put(COMMAND_OK);
+            protocol_send_buffer_put(RESPONSE_OK);
 
         break;
 
