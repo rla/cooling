@@ -30,7 +30,7 @@ void init_port_d() {
 }
 
 // Enable phase-correct PWM mode (p. 105)
-// No prescaler. Frequency: fclkIO/510
+// No prescaler. Frequency: fclkIO/510.
 
 void init_timer_0() {
 
@@ -57,8 +57,18 @@ void init_timer_1() {
     OCR1A = 32000;
 }
 
+// Enable phase-correct PWM mode.
+// No prescaler. Frequency: fclkIO/510 (p. 144).
+
 void init_timer_2() {
 
+    // Clear OC2A on Compare Match when up-counting. Set OC2A on
+    // Compare Match when down-counting.
+    // Clear OC2B on Compare Match when up-counting. Set OC2B on
+    // Compare Match when down-counting.
+
+    TCCR2A = (1 << COM2A1) | (1 << COM2B1) | (1 << WGM20);
+    TCCR2B = (1 << CS20);
 }
 
 void init_usart() {
