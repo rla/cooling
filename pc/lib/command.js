@@ -1,49 +1,130 @@
-var Buffer = require('buffer').Buffer;
-var pearson = require('./pearson');
+var encoder = require('./encoder');
+var decoder = require('./decoder');
 
-var commands = {
+// FIXME encode message right away.
 
-    COMMAND_ADC_0: 1,
-    COMMAND_ADC_1: 2,
+// Retrieves temperature from sensor 0.
 
-    COMMAND_GET_RPM_0: 3,
-    COMMAND_GET_RPM_1: 4,
-    COMMAND_GET_RPM_2: 5,
-    COMMAND_GET_RPM_3: 6,
+exports.temp0 = function() {
 
-    COMMAND_SET_PWM_0: 7,
-    COMMAND_SET_PWM_1: 8,
-    COMMAND_SET_PWM_2: 9,
-    COMMAND_SET_PWM_3: 10,
-
-    COMMAND_GET_PWM_0: 11,
-    COMMAND_GET_PWM_1: 12,
-    COMMAND_GET_PWM_2: 13,
-    COMMAND_GET_PWM_3: 14,
-
-    COMMAND_ENABLE_0: 15,
-    COMMAND_ENABLE_1: 16,
-    COMMAND_ENABLE_2: 17,
-    COMMAND_ENABLE_3: 18,
-
-    COMMAND_DISABLE_0: 19,
-    COMMAND_DISABLE_1: 20,
-    COMMAND_DISABLE_2: 21,
-    COMMAND_DISABLE_3: 22,
-
-    COMMAND_ECHO: 254,
-
-    COMMAND_END: 0,
-    COMMAND_OK: 255
+    return { encoder: encoder.temp0, decoder: decoder.byteDecoder };
 };
 
-exports.echo = function(byte) {
+// Retrieves temperature from sensor 1.
 
-    var buffer = new Buffer(3);
+exports.temp1 = function() {
 
-    buffer.writeUInt8(commands.COMMAND_ECHO, 0);
-    buffer.writeUInt8(byte, 1);
-    buffer.writeUInt8(pearson(buffer, 0, 2), 2);
+    return { encoder: encoder.temp1, decoder: decoder.byteDecoder };
+};
 
-    return buffer.toString('hex');
+// Retrieves RPM of fan 0.
+
+exports.rpm0 = function() {
+
+    return { encoder: encoder.rpm0, decoder: decoder.shortDecoder };
+};
+
+// Retrieves RPM of fan 1.
+
+exports.rpm1 = function() {
+
+    return { encoder: encoder.rpm1, decoder: decoder.shortDecoder };
+};
+
+// Retrieves RPM of fan 2.
+
+exports.rpm2 = function() {
+
+    return { encoder: encoder.rpm2, decoder: decoder.shortDecoder };
+};
+
+// Retrieves RPM of fan 3.
+
+exports.rpm3 = function() {
+
+    return { encoder: encoder.rpm3, decoder: decoder.shortDecoder };
+};
+
+// Enables fan 0.
+
+exports.enable0 = function() {
+
+    return { encoder: encoder.enable0, decoder: decoder.noValueDecoder };
+};
+
+// Enables fan 1.
+
+exports.enable1 = function() {
+
+    return { encoder: encoder.enable1, decoder: decoder.noValueDecoder };
+};
+
+// Enables fan 2.
+
+exports.enable2 = function() {
+
+    return { encoder: encoder.enable2, decoder: decoder.noValueDecoder };
+};
+
+// Enables fan 3.
+
+exports.enable3 = function() {
+
+    return { encoder: encoder.enable3, decoder: decoder.noValueDecoder };
+};
+
+// Disables fan 0.
+
+exports.disable0 = function() {
+
+    return { encoder: encoder.disable0, decoder: decoder.noValueDecoder };
+};
+
+// Disables fan 1.
+
+exports.disable1 = function() {
+
+    return { encoder: encoder.disable1, decoder: decoder.noValueDecoder };
+};
+
+// Disables fan 2.
+
+exports.disable2 = function() {
+
+    return { encoder: encoder.disable2, decoder: decoder.noValueDecoder };
+};
+
+// Disables fan 3.
+
+exports.disable3 = function() {
+
+    return { encoder: encoder.disable3, decoder: decoder.noValueDecoder };
+};
+
+// Sets fan 0 PWM.
+
+exports.setPwm0 = function(pwm) {
+
+    return { encoder: encoder.setPwm0.bind(null, pwm), decoder: decoder.noValueDecoder };
+};
+
+// Sets fan 1 PWM.
+
+exports.setPwm1 = function(pwm) {
+
+    return { encoder: encoder.setPwm1.bind(null, pwm), decoder: decoder.noValueDecoder };
+};
+
+// Sets fan 2 PWM.
+
+exports.setPwm2 = function(pwm) {
+
+    return { encoder: encoder.setPwm2.bind(null, pwm), decoder: decoder.noValueDecoder };
+};
+
+// Sets fan 3 PWM.
+
+exports.setPwm3 = function(pwm) {
+
+    return { encoder: encoder.setPwm3.bind(null, pwm), decoder: decoder.noValueDecoder };
 };
