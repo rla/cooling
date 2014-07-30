@@ -76,9 +76,12 @@ void measure() {
 
 #include "init.c"
 #include "fans.c"
+#include "init_fans.c"
 #include "adc.c"
 #include "measure.c"
 #include "rpm.c"
+#include "adjust.c"
+#include "error.c"
 #include "hex.c"
 #include "usart_buffer.c"
 #include "pearson.c"
@@ -88,9 +91,9 @@ void measure() {
 int main() {
 
     init();
+    init_fans(0);
 
-    fan_enable(0);
-    fan_set_pwm(0, 120);
+    uint8_t start_wait = 0;
 
     while (1) {
 
@@ -103,7 +106,19 @@ int main() {
                 measure_timeout = 1;
             }
 
-            // adjust();
+            // Wait some time before enabling
+            // the adjustment algorithm.
+
+            if (start_wait < 10) {
+
+                start_wait += 1;
+
+            } else {
+
+                adjust();
+
+                check_error();
+            }
         }
     };
 

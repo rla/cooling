@@ -11,6 +11,7 @@ the following features:
  * Error signal output.
  * Can be controlled/queried over RS-232 interface.
  * NodeJS library to manipulate the device from PC.
+ * Command-line client to query/debug/control the device.
  * Hardware design and source code is MIT-licensed.
 
 The project is still work-in-progress.
@@ -127,6 +128,12 @@ Board layout in Eagle format can be found in the file `hw/board.brd`. Layout
 suitable for tone-transfer can be found in the PDF file `hw/board.pdf`.
 
 ![Board layout](hw/board.png)
+
+### RS-232 interface
+
+#### Level translator
+
+#### Debugging
 
 ### Building binary
 
