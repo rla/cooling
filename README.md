@@ -129,6 +129,18 @@ suitable for tone-transfer can be found in the PDF file `hw/board.pdf`.
 
 ![Board layout](hw/board.png)
 
+### Fan connectors
+
+4-wire connectors are standardized in the [specification](http://www.formfactors.org/developer%5Cspecs%5Crev1_2_public.pdf).
+Connector pinout with typical wire colors is:
+
+ * 1 - GND - black
+ * 2 - 12V - yellow
+ * 3 - RPM - green
+ * 4 - PWM - blue
+
+![4-pin molex](hw/molex_4pin.png)
+
 ### RS-232 interface
 
 #### Level translator
