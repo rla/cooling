@@ -1,6 +1,6 @@
 // Usart receive/send buffers.
 
-#define USART_BUFFER_SIZE 20
+#define USART_BUFFER_SIZE 40
 
 volatile uint8_t usart_buffer_send_data[USART_BUFFER_SIZE];
 volatile uint8_t usart_buffer_send_length = 0;

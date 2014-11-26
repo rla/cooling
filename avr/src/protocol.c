@@ -26,6 +26,12 @@
 #define COMMAND_DISABLE_2 21
 #define COMMAND_DISABLE_3 22
 
+#define COMMAND_TEMP0_SET 23
+#define COMMAND_TEMP1_SET 24
+
+#define COMMAND_TEMP0_GET 25
+#define COMMAND_TEMP1_GET 26
+
 #define COMMAND_ECHO 254
 
 #define RESPONSE_OK 255
@@ -34,7 +40,7 @@
 
 // Must be <= USART_BUFFER_SIZE
 
-#define PROTOCOL_BUFFER_SIZE 10
+#define PROTOCOL_BUFFER_SIZE 20
 
 volatile uint8_t protocol_recv_buffer[PROTOCOL_BUFFER_SIZE];
 volatile uint8_t protocol_recv_buffer_length = 0;
@@ -80,6 +86,119 @@ uint8_t protocol_verify() {
 
     return check == pearson_hash(
         protocol_recv_buffer, 0, protocol_recv_buffer_length - 1);
+}
+
+// Reads the control line from
+// the receive buffer.
+// This must be consistent with the
+// t_temp_line definition.
+
+void protocol_read_control_line(t_temp_line *line) {
+
+    line->control = protocol_recv_buffer[2];
+    line->min_temp = protocol_recv_buffer[3];
+    line->max_temp = protocol_recv_buffer[4];
+    line->fan0_pwm = protocol_recv_buffer[5];
+    line->fan1_pwm = protocol_recv_buffer[6];
+    line->fan2_pwm = protocol_recv_buffer[7];
+    line->fan3_pwm = protocol_recv_buffer[8];
+}
+
+// Puts the control line data into
+// the send buffer.
+
+void protocol_put_control_line(t_temp_line *line) {
+
+    protocol_send_buffer_put(line->control);
+    protocol_send_buffer_put(line->min_temp);
+    protocol_send_buffer_put(line->max_temp);
+    protocol_send_buffer_put(line->fan0_pwm);
+    protocol_send_buffer_put(line->fan1_pwm);
+    protocol_send_buffer_put(line->fan2_pwm);
+    protocol_send_buffer_put(line->fan3_pwm);
+}
+
+// FIXME set response ok/fail here.
+// Sets a control line for temperature 0.
+
+uint8_t protocol_command_run_set_temp0() {
+
+    t_temp_line line;
+
+    // Line index.
+
+    uint8_t i = protocol_recv_buffer[1];
+
+    if (i >= 5) {
+
+        return 0;
+    }
+
+    protocol_read_control_line(&line);
+
+    adjust_write_temp0_line(i, &line);
+
+    return 1;
+}
+
+// Sets a control line for temperature 1.
+
+uint8_t protocol_command_run_set_temp1() {
+
+    t_temp_line line;
+
+    // Line index.
+
+    uint8_t i = protocol_recv_buffer[1];
+
+    if (i >= 5) {
+
+        return 0;
+    }
+
+    protocol_read_control_line(&line);
+
+    adjust_write_temp1_line(i, &line);
+
+    return 1;
+}
+
+// FIXME refactor.
+
+void protocol_command_run_get_temp0() {
+
+    t_temp_line line;
+
+    uint8_t i = protocol_recv_buffer[1];
+
+    if (i >= 5) {
+
+        protocol_send_buffer_put(RESPONSE_FAIL);
+    }
+
+    adjust_read_temp0_line(i, &line);
+
+    protocol_send_buffer_put(RESPONSE_OK);
+
+    protocol_put_control_line(&line);
+}
+
+void protocol_command_run_get_temp1() {
+
+    t_temp_line line;
+
+    uint8_t i = protocol_recv_buffer[1];
+
+    if (i >= 5) {
+
+        protocol_send_buffer_put(RESPONSE_FAIL);
+    }
+
+    adjust_read_temp1_line(i, &line);
+
+    protocol_send_buffer_put(RESPONSE_OK);
+
+    protocol_put_control_line(&line);
 }
 
 // Runs the decoded command.
@@ -194,6 +313,7 @@ void protocol_command_run() {
 
         case COMMAND_DISABLE_0:
 
+            fan_set_pwm(0, 0);
             fan_disable(0);
             protocol_send_buffer_put(RESPONSE_OK);
 
@@ -201,6 +321,7 @@ void protocol_command_run() {
 
         case COMMAND_DISABLE_1:
 
+            fan_set_pwm(1, 0);
             fan_disable(1);
             protocol_send_buffer_put(RESPONSE_OK);
 
@@ -208,6 +329,7 @@ void protocol_command_run() {
 
         case COMMAND_DISABLE_2:
 
+            fan_set_pwm(2, 0);
             fan_disable(2);
             protocol_send_buffer_put(RESPONSE_OK);
 
@@ -215,8 +337,47 @@ void protocol_command_run() {
 
         case COMMAND_DISABLE_3:
 
+            fan_set_pwm(3, 0);
             fan_disable(3);
             protocol_send_buffer_put(RESPONSE_OK);
+
+        break;
+
+        case COMMAND_TEMP0_SET:
+
+            if (protocol_command_run_set_temp0()) {
+
+                protocol_send_buffer_put(RESPONSE_OK);
+
+            } else {
+
+                protocol_send_buffer_put(RESPONSE_FAIL);
+            }
+
+        break;
+
+        case COMMAND_TEMP1_SET:
+
+            if (protocol_command_run_set_temp1()) {
+
+                protocol_send_buffer_put(RESPONSE_OK);
+
+            } else {
+
+                protocol_send_buffer_put(RESPONSE_FAIL);
+            }
+
+        break;
+
+        case COMMAND_TEMP0_GET:
+
+            protocol_command_run_get_temp0();
+
+        break;
+
+        case COMMAND_TEMP1_GET:
+
+            protocol_command_run_get_temp1();
 
         break;
 

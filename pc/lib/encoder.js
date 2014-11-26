@@ -33,7 +33,24 @@ var commands = {
     DISABLE_2: 21,
     DISABLE_3: 22,
 
+    TEMP0_SET: 23,
+    TEMP1_SET: 24,
+
+    TEMP0_GET: 25,
+    TEMP1_GET: 26,
+
     ECHO: 254
+};
+
+// Control line bits.
+
+var controlBits = {
+
+    ENABLED: 0,
+    AFFECT_FAN0: 1,
+    AFFECT_FAN1: 2,
+    AFFECT_FAN2: 3,
+    AFFECT_FAN3: 4
 };
 
 exports.temp0 = function() {
@@ -45,6 +62,114 @@ exports.temp1 = function() {
 
     return singleByteCommand(commands.TEMP_1);
 };
+
+// Retrieves control line for temperature 0.
+
+exports.getTemp0Control = function(index) {
+
+    return singleArgCommand(commands.TEMP0_GET, index);
+};
+
+// Retrieves control line for temperature 1.
+
+exports.getTemp1Control = function(index) {
+
+    return singleArgCommand(commands.TEMP1_GET, index);
+};
+
+// Sets control line for temperature 0.
+
+exports.setTemp0Control = function(index, data) {
+
+    var buffer = new Buffer(10);
+
+    buffer.writeUInt8(commands.TEMP0_SET, 0);
+    buffer.writeUInt8(index, 1);
+
+    writeControl(buffer, data);
+
+    buffer.writeUInt8(pearson(buffer, 0, 9), 9);
+
+    return buffer.toString('hex');
+};
+
+// Sets control line for temperature 1.
+
+exports.setTemp1Control = function(index, data) {
+
+    var buffer = new Buffer(10);
+
+    buffer.writeUInt8(commands.TEMP1_SET, 0);
+    buffer.writeUInt8(index, 1);
+
+    writeControl(buffer, data);
+
+    buffer.writeUInt8(pearson(buffer, 0, 9), 9);
+
+    return buffer.toString('hex');
+};
+
+function writeControl(buffer, data) {
+
+    var control = 0;
+
+    var enabled = propertyWithDefault('enabled', data, true);
+
+    var affectFan0 = propertyWithDefault('affect_fan0', data, false);
+    var affectFan1 = propertyWithDefault('affect_fan1', data, false);
+    var affectFan2 = propertyWithDefault('affect_fan2', data, false);
+    var affectFan3 = propertyWithDefault('affect_fan3', data, false);
+
+    if (enabled) {
+
+        control |= (1 << controlBits.ENABLED);
+    }
+
+    if (affectFan0) {
+
+        control |= (1 << controlBits.AFFECT_FAN0);
+    }
+
+    if (affectFan1) {
+
+        control |= (1 << controlBits.AFFECT_FAN1);
+    }
+
+    if (affectFan2) {
+
+        control |= (1 << controlBits.AFFECT_FAN2);
+    }
+
+    if (affectFan3) {
+
+        control |= (1 << controlBits.AFFECT_FAN3);
+    }
+
+    buffer.writeUInt8(control, 2);
+
+    buffer.writeUInt8(propertyWithDefault('min_temp', data, 0), 3);
+    buffer.writeUInt8(propertyWithDefault('max_temp', data, 255), 4);
+
+    buffer.writeUInt8(propertyWithDefault('fan0_pwm', data, 255), 5);
+    buffer.writeUInt8(propertyWithDefault('fan1_pwm', data, 255), 6);
+    buffer.writeUInt8(propertyWithDefault('fan2_pwm', data, 255), 7);
+    buffer.writeUInt8(propertyWithDefault('fan3_pwm', data, 255), 8);
+}
+
+// Reads given property. If not set, uses
+// the default value.
+
+function propertyWithDefault(key, obj, def) {
+
+    if (typeof obj[key] === 'undefined') {
+
+        return def;
+
+    } else {
+
+        return obj[key];
+    }
+}
 
 exports.echo = function(byte) {
 

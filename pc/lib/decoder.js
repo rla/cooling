@@ -89,6 +89,72 @@ exports.shortDecoder = function(line, cb) {
     });
 };
 
+// Control line bits.
+// FIXME duplicated code
+
+var controlBits = {
+
+    ENABLED: 0,
+    AFFECT_FAN0: 1,
+    AFFECT_FAN1: 2,
+    AFFECT_FAN2: 3,
+    AFFECT_FAN3: 4
+};
+
+// Decodes a temperature control line.
+
+exports.lineDecoder = function(line, cb) {
+
+    decode(line, function(err, buffer) {
+
+        if (err) {
+
+            cb(err);
+
+        } else {
+
+            // [ response_type, control, min_temp, max_temp,
+            //  fan0_pwm, fan1_pwm, fan2_pwm, fan3_pwm, checksum ]
+
+            var control = buffer.readUInt8(1);
+
+            var data = {
+
+                enabled: !!(control & (1 << controlBits.ENABLED)),
+
+                affect_fan0: !!(control & (1 << controlBits.AFFECT_FAN0)),
+
+                affect_fan1: !!(control & (1 << controlBits.AFFECT_FAN1)),
+
+                affect_fan2: !!(control & (1 << controlBits.AFFECT_FAN2)),
+
+                affect_fan3: !!(control & (1 << controlBits.AFFECT_FAN3)),
+
+                min_temp: buffer.readUInt8(2),
+
+                max_temp: buffer.readUInt8(3),
+
+                fan0_pwm: buffer.readUInt8(4),
+
+                fan1_pwm: buffer.readUInt8(5),
+
+                fan2_pwm: buffer.readUInt8(6),
+
+                fan3_pwm: buffer.readUInt8(7)
+            };
+
+            if (buffer.length !== 9) {
+
+                cb(new Error('Invalid response length for short, line: ' + line));
+
+            } else {
+
+                cb(null, data);
+            }
+        }
+    });
+};
+
 // Decodes hex-encoded response.
 // Checks that buffer contains
 // a valid response.

@@ -119,6 +119,8 @@ Full schematics in Eagle format can be found in the file `hw/schematics.sch`.
  * Q2, Q4, Q6, Q8 2N7000
  * Q3, Q5, Q7, Q9 IRF9530
  * L1 10uH
+ * X3 molex power connector, [Farnell product page](http://uk.farnell.com/jsp/search/productdetail.jsp?SKU=1391827)
+ * X6, X7, X8, X9 molex 47053-1000 headers, [Farnell product page](http://uk.farnell.com/jsp/search/productdetail.jsp?SKU=2313705)
 
 TODO: molex connectors
 
@@ -131,7 +133,7 @@ suitable for tone-transfer can be found in the PDF file `hw/board.pdf`.
 
 ### Fan connectors
 
-4-wire connectors are standardized in the [specification](http://www.formfactors.org/developer%5Cspecs%5Crev1_2_public.pdf).
+4-wire connectors are standardized in the [specification](http://www.formfactors.org/developer%5Cspecs%5C4_Wire_PWM_Spec.pdf).
 Connector pinout with typical wire colors is:
 
  * 1 - GND - black
@@ -140,6 +142,22 @@ Connector pinout with typical wire colors is:
  * 4 - PWM - blue
 
 ![4-pin molex](hw/molex_4pin.png)
+
+#### 3-wire connectors
+
+3-wire connectors lack PWM signal but are otherwise compatible with
+4-wire headers. Pinout:
+
+ * 1 - GND - black
+ * 2 - 12V - red
+ * 3 - RPM - yellow
+
+While a 3-wire fan lacks PWM control, it can still be made variable-speed by
+modulating the supply voltage.
+
+#### 3-wire adaptor
+
+
 
 ### RS-232 interface
 

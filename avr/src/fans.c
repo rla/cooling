@@ -34,8 +34,6 @@ void fan_enable(uint8_t fan) {
 
 void fan_disable(uint8_t fan) {
 
-    fan_set_pwm(fan, 0);
-
     switch (fan) {
 
         case 0: PORTB &= ~(1 << PB0); break;

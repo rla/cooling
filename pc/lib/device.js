@@ -21,6 +21,34 @@ exports.open = function(file, cb) {
         con.send(command.temp1(), cb);
     };
 
+    // Sets a control line for temperature 0.
+
+    device.setTemp0Control = function(index, data, cb) {
+
+        con.send(command.setTemp0Control(index, data), cb);
+    };
+
+    // Sets a control line for temperature 1.
+
+    device.setTemp1Control = function(index, data, cb) {
+
+        con.send(command.setTemp1Control(index, data), cb);
+    };
+
+    // Gets a control line for temperature 0.
+
+    device.getTemp0Control = function(index, cb) {
+
+        con.send(command.getTemp0Control(index), cb);
+    };
+
+    // Gets a control line for temperature 1.
+
+    device.getTemp1Control = function(index, cb) {
+
+        con.send(command.getTemp1Control(index), cb);
+    };
+
     // Queries fan 0 RPM.
 
     device.rpm0 = function(cb) {

@@ -17,6 +17,38 @@ exports.temp1 = function() {
     return { encoder: encoder.temp1, decoder: decoder.byteDecoder };
 };
 
+// Sets a control line for temperature 0.
+
+exports.setTemp0Control = function(index, data) {
+
+    return { encoder: encoder.setTemp0Control.bind(null, index, data),
+        decoder: decoder.noValueDecoder };
+};
+
+// Sets a control line for temperature 1.
+
+exports.setTemp1Control = function(index, data) {
+
+    return { encoder: encoder.setTemp1Control.bind(null, index, data),
+        decoder: decoder.noValueDecoder };
+};
+
+// Gets a control line for temperature 0.
+
+exports.getTemp0Control = function(index) {
+
+    return { encoder: encoder.getTemp0Control.bind(null, index),
+        decoder: decoder.lineDecoder };
+};
+
+// Gets a control line for temperature 1.
+
+exports.getTemp1Control = function(index) {
+
+    return { encoder: encoder.getTemp1Control.bind(null, index),
+        decoder: decoder.lineDecoder };
+};
+
 // Retrieves RPM of fan 0.
 
 exports.rpm0 = function() {
