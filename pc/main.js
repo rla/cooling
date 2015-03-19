@@ -103,7 +103,14 @@ if (options.help) {
             // Just write the command output
             // and exit.
 
-            console.log(output);
+            if (typeof output === 'object') {
+
+                console.log(JSON.stringify(output, null, 2));
+
+            } else {
+
+                console.log(output);
+            }
             process.exit(0);
         });
 
