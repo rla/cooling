@@ -1,176 +1,115 @@
-var program = require('commander');
-var version = require('./package.json').version;
-var device = require('./lib/device');
+var args = require('./lib/args');
+var help = require('./lib/help');
+var encode = require('./lib/encode');
+var commands = require('./lib/commands');
+var connection = require('./lib/connection');
 
-program.version(version)
-    .option('-p, --port [port]', 'Serial port to use.')
-    .option('-q, --query [query]', 'Queries current temperature/rpm/pwm.')
-    .option('-c, --command [command]', 'Enables/disables fans, sets parameters.')
-    .option('-a, --arg [value]', 'Argument value for the command.')
-    .parse(process.argv);
+var options = args(process.argv);
 
-if (program.port) {
+if (options.help) {
 
-    if (program.query || program.command) {
+    help();
 
-        var d = device.open(program.port, function() {
-
-            if (program.command === 'enable0') {
-
-                d.enable0(handleCommand);
-
-            } else if (program.command === 'enable1') {
-
-                d.enable1(handleCommand);
-
-            } else if (program.command === 'enable2') {
-
-                d.enable2(handleCommand);
-
-            } else if (program.command === 'enable3') {
-
-                d.enable3(handleCommand);
-
-            } else if (program.command === 'disable0') {
-
-                d.disable0(handleCommand);
-
-            } else if (program.command === 'disable1') {
-
-                d.disable1(handleCommand);
-
-            } else if (program.command === 'disable2') {
-
-                d.disable2(handleCommand);
-
-            } else if (program.command === 'disable3') {
-
-                d.disable3(handleCommand);
-
-            } else if (program.command === 'pwm0') {
-
-                if (program.arg) {
-
-                    d.setPwm0(parseInt(program.arg, 10), handleCommand);
-
-                } else {
-
-                    console.error('PWM command needs argument.');
-
-                    process.exit(1);
-                }
-
-            } else if (program.command === 'pwm1') {
-
-                if (program.arg) {
-
-                    d.setPwm1(parseInt(program.arg, 10), handleCommand);
-
-                } else {
-
-                    console.error('PWM command needs argument.');
-
-                    process.exit(1);
-                }
-
-            } else if (program.command === 'pwm2') {
-
-                if (program.arg) {
-
-                    d.setPwm2(parseInt(program.arg, 10), handleCommand);
-
-                } else {
-
-                    console.error('PWM command needs argument.');
-
-                    process.exit(1);
-                }
-
-            } else if (program.command === 'pwm3') {
-
-                if (program.arg) {
-
-                    d.setPwm3(parseInt(program.arg, 10), handleCommand);
-
-                } else {
-
-                    console.error('PWM command needs argument.');
-
-                    process.exit(1);
-                }
-
-            } else if (program.query === 'temp0') {
-
-                d.temp0(handleResponse);
-
-            } else if (program.query === 'temp1') {
-
-                d.temp1(handleResponse);
-
-            } else if (program.query === 'rpm0') {
-
-                d.rpm0(handleResponse);
-
-            } else if (program.query === 'rpm1') {
-
-                d.rpm1(handleResponse);
-
-            } else if (program.query === 'rpm2') {
-
-                d.rpm2(handleResponse);
-
-            } else if (program.query === 'rpm3') {
-
-                d.rpm3(handleResponse);
-            }
-        });
-    }
+    process.exit(0);
 
 } else {
 
-    console.log('Serial port is not set.');
+    if (!options.port || options.port.length === 0) {
 
-    process.exit(1);
-}
-
-function handleResponse(err, temp) {
-
-    if (err) {
-
-        console.error(err.message);
-
+        process.stderr.write('Port is not set. Try using --help.\n');
         process.exit(1);
-
-    } else {
-
-        console.log(temp);
-
-        // See https://github.com/voodootikigod/node-serialport/issues/241
-
-        setTimeout(function() {
-
-            d.close();
-
-        }, 10);
     }
-}
 
-function handleCommand(err) {
+    if (!options.command || options.command.length === 0) {
 
-    if (err) {
-
-        console.error(err.message);
-
+        process.stderr.write('Command is not set. Try using --help.\n');
         process.exit(1);
-
-    } else {
-
-        // See https://github.com/voodootikigod/node-serialport/issues/241
-
-        setTimeout(function() {
-
-            d.close();
-
-        }, 10);
     }
+
+    var name = options.command[0];
+
+    var command = commands[name.toUpperCase()];
+
+    if (!command) {
+
+        process.stderr.write('The given command ' + name.toLowerCase() +
+            ' does not exist. Try using --help.\n');
+        process.exit(1);
+    }
+
+    // Parsed command arguments.
+
+    var parsed = [], value;
+
+    if (command.encode === encode.byte) {
+
+        if (options.command.length < 2) {
+
+            process.stderr.write('The given command ' + name.toLowerCase() +
+                ' expects argument. Try using --help.\n');
+            process.exit(1);
+        }
+
+        value = parseInt(options.command[1], 10);
+
+        if (isNaN(value) || value < 0 || value > 255) {
+
+            process.stderr.write('The given command ' + name.toLowerCase() +
+                ' expects byte (0-255) as the argument. Try using --help.\n');
+            process.exit(1);
+        }
+
+        parsed.push(value);
+    }
+
+    if (command.encode === encode.control) {
+
+        if (options.command.length < 3) {
+
+            process.stderr.write('The given command ' + name.toLowerCase() +
+                ' expects 2 arguments. Try using --help.\n');
+            process.exit(1);
+        }
+
+        value = parseInt(options.command[1], 10);
+
+        if (isNaN(value) || value < 0 || value > 255) {
+
+            process.stderr.write('The given command ' + name.toLowerCase() +
+                ' expects line index (0-4) as the first argument. Try using --help.\n');
+            process.exit(1);
+        }
+
+        parsed.push(value);
+
+        try {
+
+            value = JSON.parse(options.command[2]);
+
+        } catch (err) {
+
+            process.stderr.write('The given command ' + name.toLowerCase() +
+                ' expects valid JSON as the second argument. Try using --help.\n');
+            process.exit(1);
+        }
+
+        parsed.push(value);
+    }
+
+    connection.open(options.port[0]).then(function(queue) {
+
+        return queue.run(command, parsed).then(function(output) {
+
+            // Just write the command output
+            // and exit.
+
+            console.log(output);
+            process.exit(0);
+        });
+
+    }).catch(function(err) {
+
+        process.stderr.write(err.stack + '\n');
+        process.exit(1);
+    });
 }

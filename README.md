@@ -304,6 +304,12 @@ parameters. Below is the supported usage.
         -c, --command [command]  Enables/disables fans, sets parameters.
         -a, --arg [value]        Argument value for the command.
 
+### Debugging
+
+Set environment variable `DEBUG=*` and run the command.
+
+    DEBUG=* cooling-query
+
 ### Installation
 
 TODO
