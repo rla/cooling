@@ -107,3 +107,42 @@ uint8_t fan_stretch_enabled(uint8_t fan) {
 
     return 0;
 }
+
+// Reads stretch data into the given buffer.
+
+void fan_stretch_read_info(uint8_t *buffer) {
+
+    eeprom_read_block(buffer, &fan_control, sizeof(fan_control));
+}
+
+// Enables pulse stretch on the given fan.
+
+void fan_stretch_enable(uint8_t fan) {
+
+    if (fan < 4) {
+
+        uint8_t control[4];
+
+        eeprom_read_block(&control, &fan_control, sizeof(fan_control));
+
+        control[fan] = 1;
+
+        eeprom_update_block(control, &fan_control, sizeof(fan_control));
+    }
+}
+
+// Disables pulse stretch on the given fan.
+
+void fan_stretch_disable(uint8_t fan) {
+
+    if (fan < 4) {
+
+        uint8_t control[4];
+
+        eeprom_read_block(&control, &fan_control, sizeof(fan_control));
+
+        control[fan] = 0;
+
+        eeprom_update_block(control, &fan_control, sizeof(fan_control));
+    }
+}

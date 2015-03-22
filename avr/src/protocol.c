@@ -32,6 +32,18 @@
 #define COMMAND_TEMP0_GET 25
 #define COMMAND_TEMP1_GET 26
 
+#define COMMAND_GET_STRETCH 27
+
+#define COMMAND_STRETCH_ENABLE_0 28
+#define COMMAND_STRETCH_ENABLE_1 29
+#define COMMAND_STRETCH_ENABLE_2 30
+#define COMMAND_STRETCH_ENABLE_3 31
+
+#define COMMAND_STRETCH_DISABLE_0 32
+#define COMMAND_STRETCH_DISABLE_1 33
+#define COMMAND_STRETCH_DISABLE_2 34
+#define COMMAND_STRETCH_DISABLE_3 35
+
 #define COMMAND_ECHO 254
 
 #define RESPONSE_OK 255
@@ -378,6 +390,85 @@ void protocol_command_run() {
         case COMMAND_TEMP1_GET:
 
             protocol_command_run_get_temp1();
+
+        break;
+
+        case COMMAND_GET_STRETCH:
+
+            protocol_send_buffer_put(RESPONSE_OK);
+
+            uint8_t stretch[4];
+
+            fan_stretch_read_info(stretch);
+
+            for (uint8_t i = 0; i < 4; i++) {
+
+                protocol_send_buffer_put(stretch[i]);
+            }
+
+        break;
+
+        case COMMAND_STRETCH_ENABLE_0:
+
+            protocol_send_buffer_put(RESPONSE_OK);
+
+            fan_stretch_enable(0);
+
+        break;
+
+        case COMMAND_STRETCH_ENABLE_1:
+
+            protocol_send_buffer_put(RESPONSE_OK);
+
+            fan_stretch_enable(1);
+
+        break;
+
+        case COMMAND_STRETCH_ENABLE_2:
+
+            protocol_send_buffer_put(RESPONSE_OK);
+
+            fan_stretch_enable(2);
+
+        break;
+
+        case COMMAND_STRETCH_ENABLE_3:
+
+            protocol_send_buffer_put(RESPONSE_OK);
+
+            fan_stretch_enable(3);
+
+        break;
+
+        case COMMAND_STRETCH_DISABLE_0:
+
+            protocol_send_buffer_put(RESPONSE_OK);
+
+            fan_stretch_disable(0);
+
+        break;
+
+        case COMMAND_STRETCH_DISABLE_1:
+
+            protocol_send_buffer_put(RESPONSE_OK);
+
+            fan_stretch_disable(1);
+
+        break;
+
+        case COMMAND_STRETCH_DISABLE_2:
+
+            protocol_send_buffer_put(RESPONSE_OK);
+
+            fan_stretch_disable(2);
+
+        break;
+
+        case COMMAND_STRETCH_DISABLE_3:
+
+            protocol_send_buffer_put(RESPONSE_OK);
+
+            fan_stretch_disable(3);
 
         break;
 
