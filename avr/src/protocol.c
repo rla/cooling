@@ -474,10 +474,8 @@ void protocol_command_run() {
 
         case COMMAND_ECHO:
 
-            for (uint8_t i = 0; i < protocol_recv_buffer_length - 1; i++) {
-
-                protocol_send_buffer_put(protocol_recv_buffer[i]);
-            }
+            protocol_send_buffer_put(RESPONSE_OK);
+            protocol_send_buffer_put(protocol_recv_buffer[1]);
 
         break;
     }
