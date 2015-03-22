@@ -1,3 +1,8 @@
+// Control settings are stored
+// in the EEPROM memory.
+
+uint8_t EEMEM fan_control[4] = { 0, 0, 0, 0 };
+
 // Sets the given fan PWM.
 
 void fan_set_pwm(uint8_t fan, uint8_t pwm) {
@@ -12,6 +17,24 @@ void fan_set_pwm(uint8_t fan, uint8_t pwm) {
 
         case 3: OCR2B = pwm; break;
     }
+}
+
+// Gets the given fan PWM.
+
+uint8_t fan_get_pwm(uint8_t fan) {
+
+    switch (fan) {
+
+        case 0: return OCR0A;
+
+        case 1: return OCR0B;
+
+        case 2: return OCR2A;
+
+        case 3: return OCR2B;
+    }
+
+    return 0;
 }
 
 // Enables the given fan.
@@ -59,6 +82,27 @@ uint8_t fan_enabled(uint8_t fan) {
         case 2: return PORTB & (1 << PB2);
 
         case 3: return PORTB & (1 << PB4);
+    }
+
+    return 0;
+}
+
+// Returns whether pulse stretch
+// is enabled on the given fan.
+
+uint8_t fan_stretch_enabled(uint8_t fan) {
+
+    if (fan > 3) {
+
+        return 0;
+
+    } else {
+
+        uint8_t control[4];
+
+        eeprom_read_block(&control, &fan_control, sizeof(fan_control));
+
+        return control[fan];
     }
 
     return 0;

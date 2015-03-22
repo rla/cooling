@@ -50,7 +50,7 @@ void init_timer_1() {
 
     TIMSK1 = (1 << TOIE1) | (1 << OCIE1A);
 
-    // Set 1024 as timeout compare
+    // Set timeout compare
     // for compare-match A. This is used
     // for RPM measurement timeout.
 

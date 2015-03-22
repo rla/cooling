@@ -3,14 +3,12 @@ volatile uint16_t rpm_1 = 0;
 volatile uint16_t rpm_2 = 0;
 volatile uint16_t rpm_3 = 0;
 
-volatile uint8_t rpm_fan = 0;
-
 // Waits for high signal on
 // the current fan's RPM input pin.
 
-void rpm_wait_high() {
+void rpm_wait_high(uint8_t fan) {
 
-    switch (rpm_fan) {
+    switch (fan) {
 
         case 0: while (!measure_timeout && (PINC & (1 << PC2))); break;
 
@@ -25,9 +23,9 @@ void rpm_wait_high() {
 // Waits for low signal on
 // the current fan's RPM input pin.
 
-void rpm_wait_low() {
+void rpm_wait_low(uint8_t fan) {
 
-    switch (rpm_fan) {
+    switch (fan) {
 
         case 0: while (!measure_timeout && !(PINC & (1 << PC2))); break;
 
@@ -42,23 +40,23 @@ void rpm_wait_low() {
 // Waits for rising signal on
 // the current fan's RPM input pin.
 
-void rpm_wait_rising() {
+void rpm_wait_rising(uint8_t fan) {
 
-    rpm_wait_low();
+    rpm_wait_low(fan);
 
     if (measure_timeout) {
 
         return;
     }
 
-    rpm_wait_high();
+    rpm_wait_high(fan);
 }
 
 // Updates the current fan's RPM value.
 
-void rpm_update(uint16_t rpm) {
+void rpm_update(uint8_t fan, uint16_t rpm) {
 
-    switch (rpm_fan) {
+    switch (fan) {
 
         case 0: rpm_0 = rpm; break;
 
@@ -70,24 +68,17 @@ void rpm_update(uint16_t rpm) {
     }
 }
 
-// Starts RPM measurement.
-// Fans are alternatively selected.
-
-void rpm_measure() {
-
-    // Selects next fan.
-
-    rpm_fan = (rpm_fan + 1) % 4;
+void rpm_measure_fan(uint8_t fan) {
 
     // Resets RPM to 0.
 
-    rpm_update(0);
+    rpm_update(fan, 0);
 
     uint16_t start;
 
     // Wait for first rising.
 
-    rpm_wait_rising();
+    rpm_wait_rising(fan);
 
     if (measure_timeout) {
 
@@ -98,7 +89,7 @@ void rpm_measure() {
 
     // Wait for second risin.
 
-    rpm_wait_rising();
+    rpm_wait_rising(fan);
 
     if (measure_timeout) {
 
@@ -109,8 +100,39 @@ void rpm_measure() {
 
     uint16_t count = TCNT1 - start;
 
-    // Updates with the new value.
-    // FIXME bring out constants
+    // See init.c for Timer 1.
+    // 46.8 kHz tick rate gives period 0.00002133.
+    // Fan does 2 pulses per rotation.
 
-    rpm_update(60 / (count * 0.00002133 * 2));
+    rpm_update(fan, 60 / (count * 0.00002133 * 2));
+}
+
+volatile uint8_t rpm_fan = 0;
+
+// Starts RPM measurement.
+// Fans are alternatively selected.
+
+void rpm_measure() {
+
+    uint8_t old = 0;
+
+    // Selects next fan.
+
+    rpm_fan = (rpm_fan + 1) % 4;
+
+    if (fan_stretch_enabled(rpm_fan)) {
+
+        // Pulse stretch enabled.
+
+        old = fan_get_pwm(rpm_fan);
+
+        fan_set_pwm(rpm_fan, 255);
+    }
+
+    rpm_measure_fan(rpm_fan);
+
+    if (fan_stretch_enabled(rpm_fan)) {
+
+        fan_set_pwm(rpm_fan, old);
+    }
 }
