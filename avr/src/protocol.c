@@ -79,7 +79,6 @@ void protocol_send_buffer_put(uint8_t byte) {
 }
 
 // Adds Pearson hash value into sending buffer.
-// FIXME rename
 
 void protocol_send_buffer_put_crc() {
 
@@ -130,7 +129,6 @@ void protocol_put_control_line(t_temp_line *line) {
     protocol_send_buffer_put(line->fan3_pwm);
 }
 
-// FIXME set response ok/fail here.
 // Sets a control line for temperature 0.
 
 uint8_t protocol_command_run_set_temp0() {
@@ -175,7 +173,7 @@ uint8_t protocol_command_run_set_temp1() {
     return 1;
 }
 
-// FIXME refactor.
+// Reads and saves a sensor 0 control line.
 
 void protocol_command_run_get_temp0() {
 
@@ -186,6 +184,8 @@ void protocol_command_run_get_temp0() {
     if (i >= 5) {
 
         protocol_send_buffer_put(RESPONSE_FAIL);
+
+        return;
     }
 
     adjust_read_temp0_line(i, &line);
@@ -194,6 +194,8 @@ void protocol_command_run_get_temp0() {
 
     protocol_put_control_line(&line);
 }
+
+// Reads and saves a sensor 0 control line.
 
 void protocol_command_run_get_temp1() {
 
@@ -204,6 +206,8 @@ void protocol_command_run_get_temp1() {
     if (i >= 5) {
 
         protocol_send_buffer_put(RESPONSE_FAIL);
+
+        return;
     }
 
     adjust_read_temp1_line(i, &line);
