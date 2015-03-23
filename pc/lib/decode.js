@@ -61,12 +61,33 @@ exports.control = function(line) {
 
         max_temp: buffer.readUInt8(3),
 
-        fan1_pwm: buffer.readUInt8(4),
+        fan0_pwm: buffer.readUInt8(4),
 
-        fan2_pwm: buffer.readUInt8(5),
+        fan1_pwm: buffer.readUInt8(5),
 
-        fan3_pwm: buffer.readUInt8(6),
+        fan2_pwm: buffer.readUInt8(6),
 
-        fan4_pwm: buffer.readUInt8(7)
+        fan3_pwm: buffer.readUInt8(7)
+    };
+};
+
+// Decoder for pulse stretch info.
+
+exports.stretch = function(line) {
+
+    // [response_type, fan0_stretch, fan1_stretch,
+    //  fan2_stretch, fan3_stretch, checksum]
+
+    var buffer = decode_line(line, 6);
+
+    return {
+
+        fan0: !!buffer.readUInt8(1),
+
+        fan1: !!buffer.readUInt8(2),
+
+        fan2: !!buffer.readUInt8(3),
+
+        fan3: !!buffer.readUInt8(4)
     };
 };

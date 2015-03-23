@@ -217,5 +217,77 @@ module.exports = {
         encode: encode.byte,
         decode: decode.byte,
         description: 'Sends and receives the given byte.'
+    },
+
+    ENABLE_STRETCH_0: {
+
+        id: 28,
+        encode: encode.nullary,
+        decode: decode.empty,
+        description: 'Enable pulse stretch for fan 0.'
+    },
+
+    ENABLE_STRETCH_1: {
+
+        id: 29,
+        encode: encode.nullary,
+        decode: decode.empty,
+        description: 'Enable pulse stretch for fan 1.'
+    },
+
+    ENABLE_STRETCH_2: {
+
+        id: 30,
+        encode: encode.nullary,
+        decode: decode.empty,
+        description: 'Enable pulse stretch for fan 2.'
+    },
+
+    ENABLE_STRETCH_3: {
+
+        id: 31,
+        encode: encode.nullary,
+        decode: decode.empty,
+        description: 'Enable pulse stretch for fan 3.'
+    },
+
+    DISABLE_STRETCH_0: {
+
+        id: 32,
+        encode: encode.nullary,
+        decode: decode.empty,
+        description: 'Disable pulse stretch for fan 0.'
+    },
+
+    DISABLE_STRETCH_1: {
+
+        id: 33,
+        encode: encode.nullary,
+        decode: decode.empty,
+        description: 'Disable pulse stretch for fan 1.'
+    },
+
+    DISABLE_STRETCH_2: {
+
+        id: 34,
+        encode: encode.nullary,
+        decode: decode.empty,
+        description: 'Disable pulse stretch for fan 2.'
+    },
+
+    DISABLE_STRETCH_3: {
+
+        id: 35,
+        encode: encode.nullary,
+        decode: decode.empty,
+        description: 'Disable pulse stretch for fan 3.'
+    },
+
+    GET_STRETCH: {
+
+        id: 27,
+        encode: encode.nullary,
+        decode: decode.stretch,
+        description: 'Query pulse stretch settings.'
     }
 };
