@@ -4,7 +4,7 @@ module.exports = function() {
 
     var list = Object.keys(commands).sort();
 
-    console.log('Usage: rcooling-query --port <port> --command <command> [arguments]');
+    console.log('Usage: avrcooling --port <port> --command <command> [arguments]');
     console.log('Recognized commands: ');
 
     list.forEach(function(name) {

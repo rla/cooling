@@ -1,4 +1,4 @@
-# cooling
+# avrcooling
 
 PC cooling controller for rotary cooling devices (fans/pumps). It has
 the following features:
@@ -189,7 +189,7 @@ and for debugging the device.
 Client options and supported commands:
 
 ```
-Usage: rcooling-query --port <port> --command <command> [arguments]
+Usage: avrcooling --port <port> --command <command> [arguments]
 Recognized commands:
   disable0       disable fan 0
   disable1       disable fan 1
@@ -234,13 +234,13 @@ Recognized commands:
 
 Set environment variable `DEBUG=*` and run the command.
 
-    DEBUG=* rcooling-query ...
+    DEBUG=* avrcooling ...
 
 ### Installation
 
 Assuming that you have [NodeJS](https://nodejs.org/) installed:
 
-    npm install -g rcooling-query
+    npm install -g avrcooling
 
 ### Protocol
 
@@ -265,8 +265,6 @@ or
 
 Multibyte integers are sent in big-endian format. Maximum decoded message length is 10 bytes.
 The detailed description of the protocol is found in [pc/lib/commands.js](pc/lib/commands.js).
-
-#### Checksum
 
 The checksum computation uses the Pearson hash algorithm:
 <http://en.wikipedia.org/wiki/Pearson_hashing>. The constants
