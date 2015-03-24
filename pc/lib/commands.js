@@ -3,212 +3,212 @@ var encode = require('./encode');
 
 module.exports = {
 
-    TEMP_0: {
+    TEMP0: {
 
         id: 1,
         encode: encode.nullary,
         decode: decode.byte,
-        description: 'Query sensor 0 temperature.'
+        description: 'query sensor 0 temperature'
     },
 
-    TEMP_1: {
+    TEMP1: {
 
         id: 2,
         encode: encode.nullary,
         decode: decode.byte,
-        description: 'Query sensor 1 temperature.'
+        description: 'query sensor 1 temperature'
     },
 
-    GET_RPM_0: {
+    RPM0: {
 
         id: 3,
         encode: encode.nullary,
         decode: decode.short,
-        description: 'Query fan 0 RPM.'
+        description: 'query fan 0 RPM'
     },
 
-    GET_RPM_1: {
+    RPM1: {
 
         id: 4,
         encode: encode.nullary,
         decode: decode.short,
-        description: 'Query fan 1 RPM.'
+        description: 'query fan 1 RPM'
     },
 
-    GET_RPM_2: {
+    RPM2: {
 
         id: 5,
         encode: encode.nullary,
         decode: decode.short,
-        description: 'Query fan 2 RPM.'
+        description: 'query fan 2 RPM'
     },
 
-    GET_RPM_3: {
+    RPM3: {
 
         id: 6,
         encode: encode.nullary,
         decode: decode.short,
-        description: 'Query fan 3 RPM.'
+        description: 'query fan 3 RPM'
     },
 
-    SET_PWM_0: {
+    PWM0_SET: {
 
         id: 7,
         encode: encode.byte,
         decode: decode.empty,
-        description: 'Set fan 0 PWM (0-255).'
+        description: 'set fan 0 PWM (0-255)'
     },
 
-    SET_PWM_1: {
+    PWM1_SET: {
 
         id: 8,
         encode: encode.byte,
         decode: decode.empty,
-        description: 'Set fan 1 PWM (0-255).'
+        description: 'set fan 1 PWM (0-255)'
     },
 
-    SET_PWM_2: {
+    PWM2_SET: {
 
         id: 9,
         encode: encode.byte,
         decode: decode.empty,
-        description: 'Set fan 2 PWM (0-255)'
+        description: 'set fan 2 PWM (0-255)'
     },
 
-    SET_PWM_3: {
+    PWM3_SET: {
 
         id: 10,
         encode: encode.byte,
         decode: decode.empty,
-        description: 'Set fan 3 PWM (0-255)'
+        description: 'set fan 3 PWM (0-255)'
     },
 
-    GET_PWM_0: {
+    PWM0_GET: {
 
         id: 11,
         encode: encode.nullary,
         decode: decode.byte,
-        description: 'Query fan 0 PWM level (0-255).'
+        description: 'query fan 0 PWM level (0-255)'
     },
 
-    GET_PWM_1: {
+    PWM1_GET: {
 
         id: 12,
         encode: encode.nullary,
         decode: decode.byte,
-        description: 'Query fan 1 PWM level (0-255).'
+        description: 'query fan 1 PWM level (0-255)'
     },
 
-    GET_PWM_2: {
+    PWM2_GET: {
 
         id: 13,
         encode: encode.nullary,
         decode: decode.byte,
-        description: 'Query fan 2 PWM level (0-255).'
+        description: 'query fan 2 PWM level (0-255)'
     },
 
-    GET_PWM_3: {
+    PWM3_GET: {
 
         id: 14,
         encode: encode.nullary,
         decode: decode.byte,
-        description: 'Query fan 3 PWM level (0-255).'
+        description: 'query fan 3 PWM level (0-255)'
     },
 
-    ENABLE_0: {
+    ENABLE0: {
 
         id: 15,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Enable fan 0.'
+        description: 'enable fan 0'
     },
 
-    ENABLE_1: {
+    ENABLE1: {
 
         id: 16,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Enable fan 1.'
+        description: 'enable fan 1'
     },
 
-    ENABLE_2: {
+    ENABLE2: {
 
         id: 17,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Enable fan 2.'
+        description: 'enable fan 2'
     },
 
-    ENABLE_3: {
+    ENABLE3: {
 
         id: 18,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Enable fan 3.'
+        description: 'enable fan 3'
     },
 
-    DISABLE_0: {
+    DISABLE0: {
 
         id: 19,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Disable fan 0.'
+        description: 'disable fan 0'
     },
 
-    DISABLE_1: {
+    DISABLE1: {
 
         id: 20,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Disable fan 1.'
+        description: 'disable fan 1'
     },
 
-    DISABLE_2: {
+    DISABLE2: {
 
         id: 21,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Disable fan 2.'
+        description: 'disable fan 2'
     },
 
-    DISABLE_3: {
+    DISABLE3: {
 
         id: 22,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Disable fan 3.'
+        description: 'disable fan 3'
     },
 
-    TEMP0_SET: {
+    TEMP0_LINE_SET: {
 
         id: 23,
         encode: encode.control,
         decode: decode.empty,
-        description: 'Set control table line (index 0-4) for sensor 0.'
+        description: 'set control table line (0-4) for sensor 0'
     },
 
-    TEMP1_SET: {
+    TEMP1_LINE_SET: {
 
         id: 24,
         encode: encode.control,
         decode: decode.empty,
-        description: 'Set control table line (index 0-4) for sensor 1.'
+        description: 'set control table line (0-4) for sensor 1'
     },
 
-    TEMP0_GET: {
+    TEMP0_LINE_GET: {
 
         id: 25,
         encode: encode.byte,
         decode: decode.control,
-        description: 'Get control table line (index 0-4) for sensor 0.'
+        description: 'get control table line (0-4) for sensor 0'
     },
 
-    TEMP1_GET: {
+    TEMP1_LINE_GET: {
 
         id: 26,
         encode: encode.byte,
         decode: decode.control,
-        description: 'Get control table line (index 0-4) for sensor 1.'
+        description: 'get control table line (0-4) for sensor 1'
     },
 
     ECHO: {
@@ -216,78 +216,78 @@ module.exports = {
         id: 254,
         encode: encode.byte,
         decode: decode.byte,
-        description: 'Sends and receives the given byte.'
+        description: 'sends and receives the given byte'
     },
 
-    ENABLE_STRETCH_0: {
+    STRETCH0: {
 
         id: 28,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Enable pulse stretch for fan 0.'
+        description: 'enable pulse stretch for fan 0'
     },
 
-    ENABLE_STRETCH_1: {
+    STRETCH1: {
 
         id: 29,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Enable pulse stretch for fan 1.'
+        description: 'enable pulse stretch for fan 1'
     },
 
-    ENABLE_STRETCH_2: {
+    STRETCH2: {
 
         id: 30,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Enable pulse stretch for fan 2.'
+        description: 'enable pulse stretch for fan 2'
     },
 
-    ENABLE_STRETCH_3: {
+    STRETCH3: {
 
         id: 31,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Enable pulse stretch for fan 3.'
+        description: 'enable pulse stretch for fan 3'
     },
 
-    DISABLE_STRETCH_0: {
+    NOSTRETCH0: {
 
         id: 32,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Disable pulse stretch for fan 0.'
+        description: 'disable pulse stretch for fan 0'
     },
 
-    DISABLE_STRETCH_1: {
+    NOSTRETCH1: {
 
         id: 33,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Disable pulse stretch for fan 1.'
+        description: 'disable pulse stretch for fan 1'
     },
 
-    DISABLE_STRETCH_2: {
+    NOSTRETCH2: {
 
         id: 34,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Disable pulse stretch for fan 2.'
+        description: 'disable pulse stretch for fan 2'
     },
 
-    DISABLE_STRETCH_3: {
+    NOSTRETCH3: {
 
         id: 35,
         encode: encode.nullary,
         decode: decode.empty,
-        description: 'Disable pulse stretch for fan 3.'
+        description: 'disable pulse stretch for fan 3'
     },
 
-    GET_STRETCH: {
+    STRETCH_INFO: {
 
         id: 27,
         encode: encode.nullary,
         decode: decode.stretch,
-        description: 'Query pulse stretch settings.'
+        description: 'query pulse stretch settings'
     }
 };
