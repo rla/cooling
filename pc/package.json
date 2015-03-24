@@ -25,5 +25,5 @@
   "preferGlobal": true,
   "bin": {
     "avrcooling": "./main"
-  },
+  }
 }
