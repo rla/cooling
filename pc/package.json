@@ -21,5 +21,9 @@
     "bluebird": "^2.9.14",
     "debug": "~1.0.4",
     "serialport": "~1.4.2"
-  }
+  },
+  "preferGlobal": true,
+  "bin": {
+    "avrcooling": "./main"
+  },
 }
