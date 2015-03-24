@@ -1,6 +1,6 @@
 {
   "name": "avrcooling",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": {
     "name": "Raivo Laanemets",
     "email": "info@rlaanemets.com"
@@ -24,6 +24,6 @@
   },
   "preferGlobal": true,
   "bin": {
-    "avrcooling": "./main"
+    "avrcooling": "./main.js"
   }
 }
