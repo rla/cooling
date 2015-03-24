@@ -1,5 +1,5 @@
 {
-  "name": "cooling-query",
+  "name": "rcooling-query",
   "version": "0.0.2",
   "dependencies": {
     "bluebird": "^2.9.14",
