@@ -1,6 +1,22 @@
 {
   "name": "rcooling-query",
   "version": "0.0.2",
+  "author": {
+    "name": "Raivo Laanemets",
+    "email": "info@rlaanemets.com"
+  },
+  "keywords": [
+    "cooling",
+    "hardware",
+    "serial",
+    "port",
+    "fan"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rla/cooling"
+  },
+  "license": "MIT",
   "dependencies": {
     "bluebird": "^2.9.14",
     "debug": "~1.0.4",
