@@ -181,10 +181,71 @@ To build the HEX binary for the controller:
  * No clock division by 8.
  * Low fuse result: 0xf7.
 
-## Protocol
+## Client
 
-The communication protocol uses line-based transport format.
-Data on individual lines is encoded in hex encoding.
+The client application is used for updating the control table lines
+and for debugging the device.
+
+Client options and supported commands:
+
+```
+Usage: rcooling-query --port <port> --command <command> [arguments]
+Recognized commands:
+  disable0       disable fan 0
+  disable1       disable fan 1
+  disable2       disable fan 2
+  disable3       disable fan 3
+  echo           sends and receives the given byte
+  enable0        enable fan 0
+  enable1        enable fan 1
+  enable2        enable fan 2
+  enable3        enable fan 3
+  nostretch0     disable pulse stretch for fan 0
+  nostretch1     disable pulse stretch for fan 1
+  nostretch2     disable pulse stretch for fan 2
+  nostretch3     disable pulse stretch for fan 3
+  pwm0_get       query fan 0 PWM level (0-255)
+  pwm0_set       set fan 0 PWM (0-255)
+  pwm1_get       query fan 1 PWM level (0-255)
+  pwm1_set       set fan 1 PWM (0-255)
+  pwm2_get       query fan 2 PWM level (0-255)
+  pwm2_set       set fan 2 PWM (0-255)
+  pwm3_get       query fan 3 PWM level (0-255)
+  pwm3_set       set fan 3 PWM (0-255)
+  rpm0           query fan 0 RPM
+  rpm1           query fan 1 RPM
+  rpm2           query fan 2 RPM
+  rpm3           query fan 3 RPM
+  stretch0       enable pulse stretch for fan 0
+  stretch1       enable pulse stretch for fan 1
+  stretch2       enable pulse stretch for fan 2
+  stretch3       enable pulse stretch for fan 3
+  stretch_info   query pulse stretch settings
+  temp0          query sensor 0 temperature
+  temp0_line_get get control table line (0-4) for sensor 0
+  temp0_line_set set control table line (0-4) for sensor 0
+  temp1          query sensor 1 temperature
+  temp1_line_get get control table line (0-4) for sensor 1
+  temp1_line_set set control table line (0-4) for sensor 1
+
+```
+
+### Debugging
+
+Set environment variable `DEBUG=*` and run the command.
+
+    DEBUG=* rcooling-query ...
+
+### Installation
+
+Assuming that you have [NodeJS](https://nodejs.org/) installed:
+
+    npm install -g rcooling-query
+
+### Protocol
+
+The client-device communication protocol terminates messages with line ends.
+Data on individual lines is encoded in the hex encoding.
 
 Decoded commands have the following format:
 
@@ -200,122 +261,20 @@ or
 
 or
 
-    [response_checksum_fail, checksum_byte]
+    [command_checksum_fail, checksum_byte]
 
-Multibyte integers are sent in big-endian format.
+Multibyte integers are sent in big-endian format. Maximum decoded message length is 10 bytes.
+The detailed description of the protocol is found in [pc/lib/commands.js](pc/lib/commands.js).
 
-Maximum decoded message length is 10 bytes.
+#### Checksum
 
-### Checksum
-
-Checksum computation uses the Pearson hash algorithm:
-http://en.wikipedia.org/wiki/Pearson_hashing
-
-### Commands
-
-The following lists valid commands.
-
-#### Query ADC
-
-Commands return unsigned byte value of
-current temperature in Celsius.
-
- * COMMAND_ADC_0 1
- * COMMAND_ADC_1 2
-
-#### Query RPM
-
-Commands return unsigned 2-byte value
-of the last RPM measurement result.
-
- * COMMAND_GET_RPM_0 3
- * COMMAND_GET_RPM_1 4
- * COMMAND_GET_RPM_2 5
- * COMMAND_GET_RPM_3 6
-
-#### Set and query PWM
-
-Commands set and query PWM value
-as single unsigned byte value. 0 - min, 255 - max.
-
- * COMMAND_SET_PWM_0 7
- * COMMAND_SET_PWM_1 8
- * COMMAND_SET_PWM_2 9
- * COMMAND_SET_PWM_3 10
- * COMMAND_GET_PWM_0 11
- * COMMAND_GET_PWM_1 12
- * COMMAND_GET_PWM_2 13
- * COMMAND_GET_PWM_3 14
-
-#### Enable and disable devices
-
-These commands and responses have no arguments.
-
- * COMMAND_ENABLE_0 15
- * COMMAND_ENABLE_1 16
- * COMMAND_ENABLE_2 17
- * COMMAND_ENABLE_3 18
- * COMMAND_DISABLE_0 19
- * COMMAND_DISABLE_1 20
- * COMMAND_DISABLE_2 21
- * COMMAND_DISABLE_3 22
-
-### Invalid commands
-
-Invalid commands are ignored. Input buffer overflow
-on MCU is guarded against by ignoring all non-line-end input
-when the buffer is full.
-
-## NodeJS library
-
-The project contains NodeJS library for connecting to the device through
-RS-232. The library is used to implement the command line client below.
-
-### Example usage
-
-TODO currently incomplete.
-
-    var d = device.open('/dev/ttyS1');
-
-    setInterval(function() {
-
-        d.temp0(function(err, data) {
-
-            if (err) throw err;
-
-            console.log(data);
-        });
-
-    }, 2000);
-
-## Command line client
-
-The command line client can be used for debugging and quering/adjusting
-parameters. Below is the supported usage.
-
-    Usage: cooling-query [options]
-
-    Options:
-
-        -h, --help               output usage information
-        -V, --version            output the version number
-        -p, --port [port]        Serial port to use.
-        -q, --query [query]      Queries current temperature/rpm/pwm.
-        -c, --command [command]  Enables/disables fans, sets parameters.
-        -a, --arg [value]        Argument value for the command.
-
-### Debugging
-
-Set environment variable `DEBUG=*` and run the command.
-
-    DEBUG=* cooling-query
-
-### Installation
-
-TODO
+The checksum computation uses the Pearson hash algorithm:
+<http://en.wikipedia.org/wiki/Pearson_hashing>. The constants
+table can be found in [avr/src/pearson.c](avr/src/pearson.c).
 
 ## Changelog
 
+ * 2015-03-24 Pulse stretching is implemented. Client code is finished.
  * 2014-07-27 Client code is mostly working.
  * 2014-07-17 AVR code is mostly working.
  * 2014-02-01 Physical hardware design is ready.
@@ -325,10 +284,6 @@ TODO
  * Max ADC input voltage is 1.1V when the internal reference is selected (by default).
  * Temperature sensor MCP9700 needs 100nF decoupling cap at the sensor to ensure
    stable operation.
- * NodeJS API/command-line client has some issues with
-   [serialport](https://github.com/voodootikigod/node-serialport) package:
-     - https://github.com/voodootikigod/node-serialport/issues/241
-     - https://github.com/voodootikigod/node-serialport/issues/126
 
 ## License
 
