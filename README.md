@@ -153,11 +153,10 @@ Connector pinout with typical wire colors is:
  * 3 - RPM - yellow
 
 While a 3-wire fan lacks PWM control, it can still be made variable-speed by
-modulating the supply voltage.
+modulating the supply voltage. This can be implemented with the following
+circuit:
 
-#### 3-wire adaptor
-
-
+![3-wire to 4-wire adapter](hw/adapter.png)
 
 ### RS-232 interface
 
