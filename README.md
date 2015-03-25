@@ -183,8 +183,8 @@ To build the HEX binary for the controller:
     cd avr
     make
 
-If avrdude is installed then the hex file can be burned into
-the device with the command:
+If [avrdude](http://www.nongnu.org/avrdude/) is installed then the hex file
+can be burned into the device with the command:
 
     make burn
 
