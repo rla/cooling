@@ -122,8 +122,6 @@ Full schematics in Eagle format can be found in the file `hw/schematics.sch`.
  * X3 molex power connector, [Farnell product page](http://uk.farnell.com/jsp/search/productdetail.jsp?SKU=1391827)
  * X6, X7, X8, X9 molex 47053-1000 headers, [Farnell product page](http://uk.farnell.com/jsp/search/productdetail.jsp?SKU=2313705)
 
-TODO: molex connectors
-
 ### Board layout
 
 Board layout in Eagle format can be found in the file `hw/board.brd`. Layout
@@ -160,18 +158,35 @@ circuit:
 
 ### RS-232 interface
 
-#### Level translator
+The RS-232 interface is used for updating the control line tables and
+for debugging the device. The connector is denoted as X1 on schematics
+and board and has the following pinout:
 
-#### Debugging
+ * 1 - TX line
+ * 2 - RX line
+ * 3 - GND
 
-### Building binary
+A level translator has to be used for connecting the device to PC. PC
+uses signal levels -12V/+12V while the device uses normal TTL levels 0V/5V.
 
-TODO: build dependencies.
+A level translator can be built using the [MAX232](http://www.ti.com/lit/ds/symlink/max232.pdf)
+chip or using a prebuilt module/cable/converter. There are various circuits and
+building instructions on the Internet.
+
+### Compiling firmware
+
+The project contains a Makefile that includes build targets
+with [avr-gcc](http://www.nongnu.org/avr-libc/) compiler.
 
 To build the HEX binary for the controller:
 
     cd avr
     make
+
+If avrdude is installed then the hex file can be burned into
+the device with the command:
+
+    make burn
 
 ### Fuses
 
@@ -179,6 +194,11 @@ To build the HEX binary for the controller:
  * Slow raising power: SUT 11.
  * No clock division by 8.
  * Low fuse result: 0xf7.
+
+If avrdude is installed then correct fuses can be burned
+using the command:
+
+    make burn-fuse
 
 ## Client
 
