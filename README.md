@@ -10,7 +10,6 @@ the following features:
  * Supports 2 thermal sensors.
  * Error signal output.
  * Can be controlled/queried over RS-232 interface.
- * NodeJS library to manipulate the device from PC.
  * Command-line client to query/debug/control the device.
  * Hardware design and source code is MIT-licensed.
 
@@ -19,13 +18,13 @@ the following features:
 The control algorithm uses 2 decision tables, one per thermal sensor.
 Table rows contain the following information:
 
- * enabled - whether the control line is enable.
- * min_temp - lower bound for activating the control line.
- * max_temp - upper bound for activating the control line.
- * affect_fan0 - whether to apply line to fan 0.
- * affect_fan1 - whether to apply line to fan 1.
- * affect_fan2 - whether to apply line to fan 2.
- * affect_fan3 - whether to apply line to fan 3.
+ * enabled - whether the control row is enable.
+ * min_temp - lower bound for activating the control row.
+ * max_temp - upper bound for activating the control row.
+ * affect_fan0 - whether to apply the row to fan 0.
+ * affect_fan1 - whether to apply the row to fan 1.
+ * affect_fan2 - whether to apply the row to fan 2.
+ * affect_fan3 - whether to apply the row to fan 3.
  * fan0_pwm - PWM value to apply for fan 0.
  * fan1_pwm - PWM value to apply for fan 1.
  * fan2_pwm - PWM value to apply for fan 2.
@@ -35,9 +34,9 @@ There are 5 rows in each table. The first row with
 min_temp...max_temp range including the current temperature is used for
 applying the control values.
 
-All cooling devices start initially in disabled state and with
-0 PWM. When a device PWM is set to value > 0 then the device power is
-enabled.
+All cooling fans start initially in disabled state and with
+0 PWM. When a fan PWM is set to value > 0 then the fan power is
+enabled. When PWM is set to 0 then the fan is also powered down.
 
 Control table rows are checked periodically. The rows can be
 read and updated using the command-line PC app described below.
