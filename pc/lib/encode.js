@@ -54,22 +54,22 @@ function writeControl(buffer, data) {
         control |= (1 << control_bits.ENABLED);
     }
 
-    if (values.affect_fan1) {
+    if (values.affect_fan0) {
 
         control |= (1 << control_bits.AFFECT_FAN1);
     }
 
-    if (values.affect_fan2) {
+    if (values.affect_fan1) {
 
         control |= (1 << control_bits.AFFECT_FAN2);
     }
 
-    if (values.affect_fan3) {
+    if (values.affect_fan2) {
 
         control |= (1 << control_bits.AFFECT_FAN3);
     }
 
-    if (values.affect_fan4) {
+    if (values.affect_fan3) {
 
         control |= (1 << control_bits.AFFECT_FAN4);
     }
@@ -79,10 +79,10 @@ function writeControl(buffer, data) {
     buffer.writeUInt8(values.min_temp, 3);
     buffer.writeUInt8(values.max_temp, 4);
 
-    buffer.writeUInt8(values.fan1_pwm, 5);
-    buffer.writeUInt8(values.fan2_pwm, 6);
-    buffer.writeUInt8(values.fan3_pwm, 7);
-    buffer.writeUInt8(values.fan4_pwm, 8);
+    buffer.writeUInt8(values.fan0_pwm, 5);
+    buffer.writeUInt8(values.fan1_pwm, 6);
+    buffer.writeUInt8(values.fan2_pwm, 7);
+    buffer.writeUInt8(values.fan3_pwm, 8);
 }
 
 // Extracts properties from
@@ -96,16 +96,16 @@ function defaults(data) {
     var values = {
 
         enabled: true,
+        affect_fan0: false,
         affect_fan1: false,
         affect_fan2: false,
         affect_fan3: false,
-        affect_fan4: false,
         min_temp: 0,
         max_temp: 255,
+        fan0_pwm: 255,
         fan1_pwm: 255,
         fan2_pwm: 255,
-        fan3_pwm: 255,
-        fan4_pwm: 255
+        fan3_pwm: 255
     };
 
     // Specialize with data:

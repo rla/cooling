@@ -49,13 +49,13 @@ exports.control = function(line) {
 
         enabled: !!(control & (1 << control_bits.ENABLED)),
 
-        affect_fan1: !!(control & (1 << control_bits.AFFECT_FAN1)),
+        affect_fan0: !!(control & (1 << control_bits.AFFECT_FAN1)),
 
-        affect_fan2: !!(control & (1 << control_bits.AFFECT_FAN2)),
+        affect_fan1: !!(control & (1 << control_bits.AFFECT_FAN2)),
 
-        affect_fan3: !!(control & (1 << control_bits.AFFECT_FAN3)),
+        affect_fan2: !!(control & (1 << control_bits.AFFECT_FAN3)),
 
-        affect_fan4: !!(control & (1 << control_bits.AFFECT_FAN4)),
+        affect_fan3: !!(control & (1 << control_bits.AFFECT_FAN4)),
 
         min_temp: buffer.readUInt8(2),
 
