@@ -31,16 +31,13 @@ Table rows contain the following information:
  * fan2_pwm - PWM value to apply for fan 2.
  * fan3_pwm - PWM value to apply for fan 3.
 
-There are 5 rows in each table. Table row is used
-when the corresponding sensor temperature is in the range
-min_temp...max_temp (including both min_temp and max_temp).
+There are 5 rows in each table. The first row with
+min_temp...max_temp range including the current temperature is used for
+applying the control values.
 
 All cooling devices start initially in disabled state and with
 0 PWM. When a device PWM is set to value > 0 then the device power is
 enabled.
-
-The first row with min_temp...max_temp range including the current
-temperature is used for applying the control values.
 
 Control table rows are checked periodically. The rows can be
 read and updated using the command-line PC app described below.
