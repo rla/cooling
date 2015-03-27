@@ -39,7 +39,10 @@ All cooling devices start initially in disabled state and with
 0 PWM. When a device PWM is set to value > 0 then the device power is
 enabled.
 
-The control table lines are checked periodically. The lines can be
+The first row with min_temp...max_temp range including the current
+temperature is used for applying the control values.
+
+Control table rows are checked periodically. The rows can be
 read and updated using the command-line PC app described below.
 
 ## Project structure
