@@ -7,14 +7,40 @@ the following features:
  * Can disable devices that still run on minimal PWM.
  * Monitors devices RPM.
  * RPM measurement supports pulse stretching.
- * Supports 2 analog sensory devices on ADC.
+ * Supports 2 thermal sensors.
  * Error signal output.
  * Can be controlled/queried over RS-232 interface.
  * NodeJS library to manipulate the device from PC.
  * Command-line client to query/debug/control the device.
  * Hardware design and source code is MIT-licensed.
 
-The project is still work-in-progress.
+### Control algorithm
+
+The control algorithm uses 2 decision tables, one per thermal sensor.
+Table rows contain the following information:
+
+ * enabled - whether the control line is enable.
+ * min_temp - lower bound for activating the control line.
+ * max_temp - upper bound for activating the control line.
+ * affect_fan0 - whether to apply line to fan 0.
+ * affect_fan1 - whether to apply line to fan 1.
+ * affect_fan2 - whether to apply line to fan 2.
+ * affect_fan3 - whether to apply line to fan 3.
+ * fan0_pwm - PWM value to apply for fan 0.
+ * fan1_pwm - PWM value to apply for fan 1.
+ * fan2_pwm - PWM value to apply for fan 2.
+ * fan3_pwm - PWM value to apply for fan 3.
+
+There are 5 rows in each table. Table row is used
+when the corresponding sensor temperature is in the range
+min_temp...max_temp (including both min_temp and max_temp).
+
+All cooling devices start initially in disabled state and with
+0 PWM. When a device PWM is set to value > 0 then the device power is
+enabled.
+
+The control table lines are checked periodically. The lines can be
+read and updated using the command-line PC app described below.
 
 ## Project structure
 
@@ -22,7 +48,7 @@ The project is divided into 3 subdirectories:
 
  * `avr` - source for microcontroller binary.
  * `hw` - physical hardware design.
- * `pc` - NodeJS library for communication.
+ * `pc` - NodeJS command-line app for communication.
 
 ## Hardware
 
