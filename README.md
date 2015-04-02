@@ -35,7 +35,7 @@ min_temp...max_temp range including the current temperature is used for
 applying the control values.
 
 All cooling fans start initially in disabled state and with
-0 PWM. When a fan PWM is set to value > 0 then the fan power is
+0 PWM. When a fan PWM is set to a value greater than 0 then the fan power is
 enabled. When PWM is set to 0 then the fan is also powered down.
 
 Control table rows are checked periodically. The rows can be
@@ -168,6 +168,9 @@ Connector pinout with typical wire colors is:
  * 3 - RPM - green
  * 4 - PWM - blue
 
+The max fan current is limited by switch MOSFET channel resistance in ON mode.
+This is about 0.3 Ohms. Max dissipation of 1W gives the max current of about 1.9A.
+
 ![4-pin molex](hw/molex_4pin.png)
 
 #### 3-wire connectors
@@ -185,7 +188,26 @@ circuit:
 
 ![3-wire to 4-wire adapter](hw/adapter.png)
 
-### RS-232 interface
+#### Temp. sensor connectors
+
+These connect MCP9700 to the board. There can be up to 2 sensors
+connected. The system assumes 0.5V offset and 10mv per °C. This can be
+changed by recompiling the firmware.
+
+ * 1 - sensor output
+ * 2 - sensor power (5V)
+ * 3 - GND
+
+#### Error signal connector
+
+Error signal is set high whenever an enabled fan's RPM
+reads 0. The signal comes directly from MCU and cannot
+be directly loaded with higher current than 40mA.
+
+ * 1 - error signal
+ * 2 - GND
+
+#### RS-232 interface
 
 The RS-232 interface is used for updating the control line tables and
 for debugging the device. The connector is denoted as X1 on schematics
