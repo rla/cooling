@@ -15,8 +15,8 @@ the following features:
 
 ### Control algorithm
 
-The control algorithm uses 2 decision tables, one per thermal sensor.
-Table rows contain the following information:
+The control algorithm uses 2 [decision tables](http://en.wikipedia.org/wiki/Decision_table),
+one per thermal sensor. Table rows contain the following information:
 
  * enabled - whether the control row is enable.
  * min_temp - lower bound for activating the control row.
@@ -153,6 +153,10 @@ Board layout in Eagle format can be found in the file `hw/board.brd`. Layout
 suitable for tone-transfer can be found in the PDF file `hw/board.pdf`.
 
 ![Board layout](hw/board.png)
+
+Photo of 2 completed units:
+
+![2 completed units](hw/photo.jpg)
 
 ### Fan connectors
 
