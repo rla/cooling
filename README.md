@@ -241,10 +241,34 @@ can be burned into the device with the command:
 
 ### Fuses
 
- * Clock selection: external full swing crystal (CKSEL 0111).
- * Slow raising power: SUT 11.
- * No clock division by 8.
- * Low fuse result: 0xf7.
+ * Clock: Full-swing crystal, BOD enabled
+ * BOD 4.3V
+
+#### Low fuse
+
+ * CKDIV8 1 (unprogrammed)
+ * CKOUT 1 (unprogrammed)
+ * SUT1 0 (crystal, BOD enabled)
+ * SUT0 1 (crystal, BOD enabled)
+ * CKSEL3 0
+ * CKSEL2 1
+ * CKSEL1 1
+ * CKSEL0 1
+
+CKSEL is for full-swing crystal osc. lfuse total 11010111 = 0xd7.
+
+#### High fuse
+
+ * RSTDISBL 1 (unprogrammed)
+ * DWEN 1 (unprogrammed)
+ * SPIEN 0 (programmed)
+ * WDTON 1 (unprogrammed)
+ * EESAVE 1 (unprogrammed)
+ * BODLEVEL2 1
+ * BODLEVEL1 0
+ * BODLEVEL0 0
+
+hfuse total 11011100 = 0xdc.
 
 If avrdude is installed then correct fuses can be burned
 using the command:
@@ -342,6 +366,7 @@ table can be found in [avr/src/pearson.c](avr/src/pearson.c).
 
 ## Changelog
 
+ * 2916-01-31 BOD (brown-out detection) enabled.
  * 2015-03-24 Pulse stretching is implemented. Client code is finished.
  * 2014-07-27 Client code is mostly working.
  * 2014-07-17 AVR code is mostly working.
