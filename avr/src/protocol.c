@@ -299,6 +299,34 @@ void protocol_command_run() {
 
         break;
 
+        case COMMAND_GET_PWM_0:
+
+            protocol_send_buffer_put(RESPONSE_OK);
+            protocol_send_buffer_put(fan_get_pwm(0));
+
+        break;
+
+        case COMMAND_GET_PWM_1:
+
+            protocol_send_buffer_put(RESPONSE_OK);
+            protocol_send_buffer_put(fan_get_pwm(1));
+
+        break;
+
+        case COMMAND_GET_PWM_2:
+
+            protocol_send_buffer_put(RESPONSE_OK);
+            protocol_send_buffer_put(fan_get_pwm(2));
+
+        break;
+
+        case COMMAND_GET_PWM_3:
+
+            protocol_send_buffer_put(RESPONSE_OK);
+            protocol_send_buffer_put(fan_get_pwm(3));
+
+        break;
+
         case COMMAND_ENABLE_0:
 
             fan_enable(0);
