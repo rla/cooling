@@ -366,7 +366,7 @@ table can be found in [avr/src/pearson.c](avr/src/pearson.c).
 
 ## Changelog
 
- * 2018-11-11 Do not reset PWM on disable.
+ * 2018-11-11 Do not reset PWM on disable. Implement missing get-pwm command.
  * 2016-01-31 BOD (brown-out detection) enabled.
  * 2015-03-24 Pulse stretching is implemented. Client code is finished.
  * 2014-07-27 Client code is mostly working.
