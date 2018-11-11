@@ -70,28 +70,30 @@ void rpm_update(uint8_t fan, uint16_t rpm) {
 
 void rpm_measure_fan(uint8_t fan) {
 
-    // Resets RPM to 0.
-
-    rpm_update(fan, 0);
-
-    uint16_t start;
-
     // Wait for first rising.
 
     rpm_wait_rising(fan);
 
     if (measure_timeout) {
 
+        // Resets RPM to 0.
+
+        rpm_update(fan, 0);
+
         return;
     }
 
-    start = TCNT1;
+    uint16_t start = TCNT1;
 
-    // Wait for second risin.
+    // Wait for second rising.
 
     rpm_wait_rising(fan);
 
     if (measure_timeout) {
+
+        // Resets RPM to 0.
+
+        rpm_update(fan, 0);
 
         return;
     }
