@@ -357,7 +357,6 @@ void protocol_command_run() {
 
         case COMMAND_DISABLE_0:
 
-            fan_set_pwm(0, 0);
             fan_disable(0);
             protocol_send_buffer_put(RESPONSE_OK);
 
@@ -365,7 +364,6 @@ void protocol_command_run() {
 
         case COMMAND_DISABLE_1:
 
-            fan_set_pwm(1, 0);
             fan_disable(1);
             protocol_send_buffer_put(RESPONSE_OK);
 
@@ -373,7 +371,6 @@ void protocol_command_run() {
 
         case COMMAND_DISABLE_2:
 
-            fan_set_pwm(2, 0);
             fan_disable(2);
             protocol_send_buffer_put(RESPONSE_OK);
 
@@ -381,7 +378,6 @@ void protocol_command_run() {
 
         case COMMAND_DISABLE_3:
 
-            fan_set_pwm(3, 0);
             fan_disable(3);
             protocol_send_buffer_put(RESPONSE_OK);
 
