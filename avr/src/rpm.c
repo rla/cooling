@@ -56,6 +56,8 @@ void rpm_wait_rising(uint8_t fan) {
 
 void rpm_update(uint8_t fan, uint16_t rpm) {
 
+    ATOMIC_BLOCK(ATOMIC_FORCEON)
+
     switch (fan) {
 
         case 0: rpm_0 = rpm; break;
