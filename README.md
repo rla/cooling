@@ -367,7 +367,8 @@ table can be found in [avr/src/pearson.c](avr/src/pearson.c).
 ## Changelog
 
  * 2018-11-11 Do not reset PWM on disable. Implement missing get-pwm command.
-   Reset RPM only on timeout preventing sporadic 0 RPM responses.
+   Reset RPM only on timeout preventing sporadic 0 RPM responses. Update RPM
+   atomically preventing potentially corrupted responses due to data race.
  * 2016-01-31 BOD (brown-out detection) enabled.
  * 2015-03-24 Pulse stretching is implemented. Client code is finished.
  * 2014-07-27 Client code is mostly working.
